@@ -1,6 +1,5 @@
 const cli = require("child_process");
 const fs = require("fs");
-const wget = require("node-wget");
 const path = require('path');
 
 const branch = "beta";
@@ -62,6 +61,15 @@ const filesToUpdate = [
     folder: "./data/"
   }
 ];
+
+const wget = (config, cb)=>{
+    cli.exec(`wget ${config.url} ${config.dest}`, (err, stdout, stderr)=>{
+        if(stderr){
+            console.error(stderr);
+        }
+        cb(err, stdout);
+    });
+}
 
 const debug = (err, stdout, stderr) => {
   if (err) {
