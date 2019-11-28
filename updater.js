@@ -40,7 +40,7 @@ const moduleFiles = [
     folder: "./"
   },
   {
-    url: "https://cdn.altv.mp/node-module/" + branch + "/" + os + "/modules/",
+    url: "https://cdn.altv.mp/node-module/" + branch + "/" + os + "/modules/libnode-module.so",
     folder: "./modules"
   }
 ];
@@ -57,18 +57,40 @@ const filesToUpdate = [
   },
   {
     url:
-      "https://cdn.altv.mp/server/" + branch + "/" + os + "/data/vehmodels.bin",
+      "https://cdn.altv.mp/server/" + branch + "/" + os + "/data/vehmods.bin",
     folder: "./data/"
   }
 ];
 
-const wget = (config, cb)=>{
-    cli.exec(`wget ${config.url} ${config.dest}`, (err, stdout, stderr)=>{
-        if(stderr){
-            console.error(stderr);
-        }
-        cb(err, stdout);
+const mkdir = (path, cb)=>{
+    cli.exec(`mkdir ${path}`, (err, stdout, stderr)=>{
+        cb(err, stdout, stderr);
     });
+}
+
+const wget = (config, cb)=>{
+    if(!fs.existsSync(path.join(__dirname, config.dest))){
+        console.log('folder does not exist!')
+        mkdir(path.join(__dirname,config.dest), (err, stdout, stderr)=>{
+            if(err ||stderr){
+                console.error(err + stderr);
+            }
+            console.log(stdout);
+            cli.exec(`cd ${config.dest} && wget ${config.url}`, (err, stdout, stderr)=>{
+                if(stderr){
+                    console.error(stderr);
+                }
+                cb(err, stdout);
+            });
+        });
+    }else{
+        cli.exec(`cd ${config.dest} && wget ${config.url}`, (err, stdout, stderr)=>{
+            if(stderr){
+                console.error(stderr);
+            }
+            cb(err, stdout);
+        });
+    }
 }
 
 const debug = (err, stdout, stderr) => {
@@ -87,7 +109,7 @@ const updateResources = () => {
     (err, stdout, stderr) => {
       debug(err, stdout, stderr);
       if (os == "x64_linux") {
-        cli.exec("mv afterliferp-dev/ ./resources/", (err, stdout, stderr) => {
+        cli.exec("mv afterliferp-dev/* ./resources/*", (err, stdout, stderr) => {
           debug(err, stdout, stderr);
           process.exit();
         });
