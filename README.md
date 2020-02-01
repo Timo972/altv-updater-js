@@ -1,6 +1,6 @@
-# afterlife-updater
+# afterlife-updater ood
  ## requirements
-  - node-wget package
+  - node-wget package 
   - linux os
  ## how-to-use
   1. Download
