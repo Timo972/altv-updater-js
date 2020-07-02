@@ -1,0 +1,24 @@
+{
+  "name": "afterlife-updater-js",
+  "version": "1.0.0",
+  "description": "- node-wget package \r   - linux os\r  ## how-to-use\r   1. Download\r   2. Execute\r   3. Done",
+  "main": "updater.js",
+  "dependencies": {
+    "lodash.isequal": "^4.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Timo972/afterlife-updater-js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Timo972/afterlife-updater-js/issues"
+  },
+  "homepage": "https://github.com/Timo972/afterlife-updater-js#readme"
+}

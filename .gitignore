@@ -1,0 +1,7 @@
+node_modules
+data
+modules
+altv-server
+server.cfg
+update.json
+start.sh
