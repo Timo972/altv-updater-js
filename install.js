@@ -2,6 +2,7 @@ const fs = require("fs")
 const https = require("https")
 const path = require('path')
 const isEqual = require('lodash.isequal');
+const { DEFAULT_ECDH_CURVE } = require("tls");
 
 
 class Updater {
@@ -57,13 +58,16 @@ class Updater {
       }
     ]
   }
+  set_c_dir(directory = '/') {
+    this._dirname = path.join(__dirname, directory)
+  }
   version_check(type) {
     return new Promise((resolve, reject) => {
       let file = this.updateFiles.find(x => x.type === type && x.name === "update.json")
       if (!file) reject(new Error("no module of type " + type));
-      if (!fs.existsSync(path.join(__dirname, file.folder, file.name))) resolve(false)
+      if (!fs.existsSync(path.join(this._dirname, file.folder, file.name))) resolve(false)
       try {
-        const current_file = fs.readFileSync(path.join(__dirname, file.folder, file.name))
+        const current_file = fs.readFileSync(path.join(this._dirname, file.folder, file.name))
         let current = JSON.parse(current_file)
         const req = https.get(file.url, (res) => {
           res.on("data", (chunk) => {
@@ -80,13 +84,13 @@ class Updater {
   }
   download_file(file) {
     return new Promise((resolve, reject) => {
-      if (fs.existsSync(path.join(__dirname, file.folder, file.name)))
-        fs.unlinkSync(path.join(__dirname, file.folder, file.name))
+      if (fs.existsSync(path.join(this._dirname, file.folder, file.name)))
+        fs.unlinkSync(path.join(this._dirname, file.folder, file.name))
       const dl = https.get(file.url, (res) => {
-        if (!fs.existsSync(path.join(__dirname, file.folder)))
-          fs.mkdirSync(path.join(__dirname, file.folder))
+        if (!fs.existsSync(path.join(this._dirname, file.folder)))
+          fs.mkdirSync(path.join(this._dirname, file.folder))
         console.log('Downloading: ' + file.name)
-        res.pipe(fs.createWriteStream(path.join(__dirname, file.folder, file.name)))
+        res.pipe(fs.createWriteStream(path.join(this._dirname, file.folder, file.name)))
         res.on('close', () => {
           resolve()
         })
@@ -117,9 +121,15 @@ class Updater {
       }
     })
   }
-  init(modules = ['js-module', 'server']) {
-    if (!fs.existsSync(path.join(__dirname, 'modules')))
-      fs.mkdirSync(path.join(__dirname, 'modules'))
+  init(directory = '/', modules = ['js-module', 'server']) {
+    if(typeof directory != 'string') return console.error('Invalid path')
+    this.set_c_dir(directory);
+    if(directory !== '/')
+      fs.writeFile(path.join(__dirname, '/altv.json'), JSON.stringify({ dir : directory }), (err) => err ? console.log(err) : null)
+    if(!fs.existsSync(this._dirname))
+      fs.mkdirSync(this._dirname)
+    if (!fs.existsSync(path.join(this._dirname, 'modules')))
+      fs.mkdirSync(path.join(this._dirname, 'modules'))
     let updated_modules = 0
     modules.forEach((module_name, index) => {
       this.version_check(module_name).then(isUp2Date => {
@@ -138,14 +148,14 @@ class Updater {
         }).catch(console.error)
       }).catch((err) => {
         let errfile = this.updateFiles.find(x=>x.name === 'update.json' && x.type === module_name)
-        fs.unlinkSync(path.join(__dirname, errfile.folder, errfile.name))
+        fs.unlinkSync(path.join(this._dirname, errfile.folder, errfile.name))
         console.error(err)
         console.log('Removed error files. Please re-run this updater')
       })
     })
   }
   generateOthers(){
-    fs.writeFileSync(path.join(__dirname, 'server.cfg'), `name: "TestServer",
+    fs.writeFileSync(path.join(this._dirname, 'server.cfg'), `name: "TestServer",
 host: "0.0.0.0",
 port: 7788,
 players: 1024,
@@ -172,25 +182,36 @@ tags: [
   "customTag3",
   "customTag4"
 ]`)
-    fs.mkdirSync(path.join(__dirname, 'resources'))
-    fs.mkdirSync(path.join(__dirname, 'cache'))
+    fs.mkdirSync(path.join(this._dirname, 'resources'))
+    fs.mkdirSync(path.join(this._dirname, 'cache'))
     if(this.os == 'x64_linux')
-      fs.writeFileSync(path.join(__dirname, 'start.sh'), `#!/bin/bash \nBASEDIR=$(dirname $0) \nexport LD_LIBRARY_PATH=\${BASEDIR} \n./altv-server`)
+      fs.writeFileSync(path.join(this._dirname, 'start.sh'), `#!/bin/bash \nBASEDIR=$(dirname $0) \nexport LD_LIBRARY_PATH=\${BASEDIR} \n./altv-server`)
   }
   uninstall() {
     console.log('uninstalling')
+    if(fs.existsSync(path.join(__dirname, '/altv.json'))) {
+      this.set_c_dir(JSON.parse(fs.readFileSync(path.join(__dirname, '/altv.json'), { encoding : 'utf8' })).dir)
+      fs.unlink(path.join(__dirname, '/altv.json'), (err) => err ? console.log(err) : null)
+      if(!fs.existsSync(this._dirname))
+        return console.log('Already uninstalled')
+      rmdirAsync(this._dirname, (err) => err ? console.log(err) : null)
+      console.log('Uninstalled altv-server')
+      return
+    }
+    else
+      this.set_c_dir()
     const remDirs = ['data', 'modules', 'cache', 'resources']
     const remFiles = ['altv-server', 'update.json', 'server.cfg', 'start.sh', 'server.log']
-    if(remDirs.filter(x=>fs.existsSync(path.join(__dirname, x))).length < 1 && remFiles.filter(x=>fs.existsSync(path.join(__dirname, x))).length < 1)return console.log('Already uninstalled')
-    remDirs.filter(x=>fs.existsSync(path.join(__dirname, x))).forEach((dir) => {
-      rmdirAsync(path.join(__dirname, dir), (err, _) => {
+    if(remDirs.filter(x=>fs.existsSync(path.join(this._dirname, x))).length < 1 && remFiles.filter(x=>fs.existsSync(path.join(this._dirname, x))).length < 1)return console.log('Already uninstalled')
+    remDirs.filter(x=>fs.existsSync(path.join(this._dirname, x))).forEach((dir) => {
+      rmdirAsync(path.join(this._dirname, dir), (err, _) => {
         if(err) console.error(err)
         console.log('Uninstalled altv-server')
       })
     })
     remFiles.forEach((file) => {
-      if(fs.existsSync(path.join(__dirname, file)))
-        fs.unlinkSync(path.join(__dirname, file))
+      if(fs.existsSync(path.join(this._dirname, file)))
+        fs.unlinkSync(path.join(this._dirname, file))
     })
   }
 }
@@ -249,11 +270,12 @@ function main(){
       after.slice(after.findIndex(isStartArg), after.length)
     args[arg.substring(2, arg.length)] = after
   })
+
   const updater = new Updater(args.branch) 
   if(args.hasOwnProperty('uninstall'))
     return updater.uninstall()
   else
-    updater.init()
+    updater.init(args.hasOwnProperty('dir') ? args.dir[0] : '/')
   if(args.hasOwnProperty('others'))
     updater.generateOthers()
 }

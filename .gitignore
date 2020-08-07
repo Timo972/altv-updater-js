@@ -3,5 +3,8 @@ data
 modules
 altv-server
 server.cfg
+server.log
 update.json
 start.sh
+build
+altv.json
