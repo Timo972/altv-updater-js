@@ -1,7 +1,7 @@
 {
-  "name": "altv-updater-js",
+  "name": "altv-srv-updater-cli",
   "version": "1.0.0",
-  "description": "alt:V Multiplayer Server installer/updater",
+  "description": "An alt:V Multiplayer Server installer/updater (https://altv.mp)",
   "main": "install.js",
   "dependencies": {
     "lodash.isequal": "^4.5.0"
