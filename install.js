@@ -219,9 +219,11 @@ tags: [
   "customTag3",
   "customTag4"
 ]`)
-    fs.mkdirSync(path.join(this._dirname, 'resources'))
-    fs.mkdirSync(path.join(this._dirname, 'cache'))
-    if (this.os == 'x64_linux')
+    if(!fs.existsSync(path.join(this._dirname, 'resources')))
+      fs.mkdirSync(path.join(this._dirname, 'resources'))
+    if(!fs.existsSync(path.join(this._dirname, 'cache')))
+      fs.mkdirSync(path.join(this._dirname, 'cache'))
+    if (this.os == 'x64_linux' && !fs.existsSync(path.join(this._dirname, 'start.sh')))
       fs.writeFileSync(path.join(this._dirname, 'start.sh'), `#!/bin/bash \nBASEDIR=$(dirname $0) \nexport LD_LIBRARY_PATH=\${BASEDIR} \n./altv-server`)
   }
   runServer() {
