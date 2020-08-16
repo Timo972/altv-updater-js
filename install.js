@@ -10,8 +10,8 @@ const isEqual = require('lodash.isequal')
 class Updater extends Evt {
   constructor(BRANCH = 'release', DIR = '/') {
     super()
-    if (fs.existsSync(path.join(__dirname, '/altv.json'))) {
-      const alt_config = JSON.parse(fs.readFileSync(path.join(__dirname, '/altv.json')))
+    if (fs.existsSync(path.join(process.cwd(), '/altv.json'))) {
+      const alt_config = JSON.parse(fs.readFileSync(path.join(process.cwd(), '/altv.json')))
       if (BRANCH == alt_config.branch)
         BRANCH = alt_config.branch
       //if (DIR == '/' || DIR == alt_config.dir)
@@ -75,10 +75,10 @@ class Updater extends Evt {
   }
   set_c_dir(directory = '/') {
     this.dir = directory
-    this._dirname = path.join(__dirname, directory)
+    this._dirname = path.join(process.cwd(), directory)
   }
   write_cfg(directory, branch) {
-    fs.writeFile(path.join(__dirname, '/altv.json'), JSON.stringify({ dir: directory, run: this.os !== 'x64_win32' ? path.join(__dirname, directory, 'start.sh') : path.join(__dirname, directory, `altv-server.exe`), branch: branch }), (err) => err ? console.log(err) : null)
+    fs.writeFile(path.join(process.cwd(), '/altv.json'), JSON.stringify({ dir: directory, run: this.os !== 'x64_win32' ? path.join(process.cwd(), directory, 'start.sh') : path.join(process.cwd(), directory, `altv-server.exe`), branch: branch }), (err) => err ? console.log(err) : null)
   }
   version_check(type) {
     return new Promise((resolve, reject) => {
@@ -252,16 +252,16 @@ tags: [
   }
   uninstall() {
     console.log('uninstalling')
-    if (fs.existsSync(path.join(__dirname, '/altv.json')) && this.dir !== '/') {
-      //this.set_c_dir(JSON.parse(fs.readFileSync(path.join(__dirname, '/altv.json'), { encoding: 'utf8' })).dir)
-      fs.unlink(path.join(__dirname, '/altv.json'), (err) => err ? console.log(err) : null)
+    if (fs.existsSync(path.join(process.cwd(), '/altv.json')) && this.dir !== '/') {
+      //this.set_c_dir(JSON.parse(fs.readFileSync(path.join(process.cwd(), '/altv.json'), { encoding: 'utf8' })).dir)
+      fs.unlink(path.join(process.cwd(), '/altv.json'), (err) => err ? console.log(err) : null)
       if (!fs.existsSync(this._dirname))
         return console.log('Already uninstalled')
       rmdirAsync(this._dirname, (err) => err ? console.log(err) : null)
       console.log('Uninstalled altv-server')
       return
-    } else if (fs.existsSync(path.join(__dirname, '/altv.json')))
-      fs.unlink(path.join(__dirname, '/altv.json'), (err) => err ? console.log(err) : null)
+    } else if (fs.existsSync(path.join(process.cwd(), '/altv.json')))
+      fs.unlink(path.join(process.cwd(), '/altv.json'), (err) => err ? console.log(err) : null)
     //else
     //this.set_c_dir()
     const remDirs = ['data', 'modules', 'cache', 'resources']
