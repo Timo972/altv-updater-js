@@ -1,8 +1,8 @@
 {
-  "name": "afterlife-updater-js",
+  "name": "altv-updater-js",
   "version": "1.0.0",
-  "description": "- node-wget package \r   - linux os\r  ## how-to-use\r   1. Download\r   2. Execute\r   3. Done",
-  "main": "updater.js",
+  "description": "alt:V Multiplayer Server installer/updater",
+  "main": "install.js",
   "dependencies": {
     "lodash.isequal": "^4.5.0"
   },
@@ -12,13 +12,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Timo972/afterlife-updater-js.git"
+    "url": "git+https://github.com/Timo972/altv-updater-js.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Timo972/afterlife-updater-js/issues"
+    "url": "https://github.com/Timo972/altv-updater-js/issues"
   },
-  "homepage": "https://github.com/Timo972/afterlife-updater-js#readme"
+  "homepage": "https://github.com/Timo972/altv-updater-js#readme",
+  "bin": {
+    "altv-srv": "./install.js"
+  }
 }
