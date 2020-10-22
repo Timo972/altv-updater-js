@@ -1,27 +1,28 @@
 {
-  "name": "altv-srv-updater-cli",
-  "version": "1.0.4",
+  "name": "altv-srv",
+  "version": "2.0.0",
   "description": "An alt:V Multiplayer Server installer/updater (https://altv.mp)",
-  "main": "install.js",
+  "main": "bin/install.js",
   "dependencies": {
+    "chalk": "^4.1.0",
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/test.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Timo972/altv-updater-js.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Timo972",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Timo972/altv-updater-js/issues"
   },
   "homepage": "https://github.com/Timo972/altv-updater-js#readme",
   "bin": {
-    "altv-srv": "./install.js"
+    "altv-srv": "./bin/install.js"
   }
 }
