@@ -157,8 +157,8 @@ async function main() {
     return (await uninstall())
 
   else {
-    const branch = args.hasOwnProperty("branch") ? args.branch : null
-    const dir = args.hasOwnProperty("dir") ? args.dir : null
+    let branch = args.hasOwnProperty("branch") ? args.branch : null
+    let dir = args.hasOwnProperty("dir") ? args.dir : null
     let modules = []
 
     if (args.hasOwnProperty("csharp"))
