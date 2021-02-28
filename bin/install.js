@@ -2,8 +2,8 @@
 
 const fs = require("fs")
 const path = require('path')
-const { promisify } = require("util")
 const chalk = require("chalk")
+const { promisify } = require("util")
 const { readConfig, writeConfig } = require("../util/config")
 const { deleteServerFiles } = require("../actions/deleteServerFiles")
 const { runServer } = require("../actions/runServer")
@@ -20,88 +20,6 @@ let workingDir = process.cwd()
 function setWorkingDir(directory = './') {
   workingDir = path.join(process.cwd(), directory)
 }
-
-/*async function init(modules, branch, dir) {
-
-  let config = {}
-
-  if (fs.existsSync(path.join(process.cwd(), ".altvrc")))
-    config = await readConfig()
-
-
-  if (config.hasOwnProperty("modules") && modules == null)
-    modules = config.modules
-
-  if (modules instanceof Array && !modules.includes("server"))
-    modules.push("server")
-
-  if (modules == null)
-    modules = ["server", "js-module"]
-
-
-  if (config.hasOwnProperty("branch") && branch == null)
-    branch = config.branch
-  else if (branch == null)
-    branch = "release"
-
-
-  if (config.hasOwnProperty("dir") && dir == null)
-    dir == config.dir
-  else if (dir == null)
-    dir = "./"
-
-  if (typeof modules !== "object" && !(modules instanceof Array))
-    throw new Error("No modules specified")
-
-  if (!isBranchValid(branch))
-    throw new Error("Invalid branch: " + branch)
-
-  if (path.isAbsolute(dir))
-    throw new Error("dir must be relative")
-
-  setUpdateBranch(branch)
-  setWorkingDir(dir)
-
-  checkDirs()
-
-  if (dir != "./" || branch != "release" || !modules.includes("js-module") || modules.includes("csharp-module"))
-    await writeConfig(dir, branch, modules)
-
-  console.log(chalk.yellowBright(`Downloading alt:V Server branch ${branch} with modules: ${modules.join(" ")} into directory: ${dir}`))
-
-  const modulePromiseChain = modules.filter(m => isModuleValid(m)).map(module => async () => {
-    console.log(`${chalk.yellowBright("[CHECKING]")}: ${module}`);
-
-    const file = updateFiles.find(x => x.type === module && x.name === "update.json")
-
-    const noUpdateNeeded = await checkVersion(file, workingDir).catch(e => {
-      const errfile = updateFiles.find(x => x.name === 'update.json' && x.type === module)
-      if (!errfile)
-        fs.unlinkSync(path.join(workingDir, errfile.folder, errfile.name))
-      console.error(e)
-      console.log('Removed error files. Please re-run this updater')
-    })
-
-    if (noUpdateNeeded) {
-      console.log(`${chalk.greenBright("[CHECKED]")}: ${module} - ${chalk.greenBright("Updated")}`)
-      return
-    }
-
-    console.log(`${chalk.yellow("[UPDATING]")}: ${module}`);
-
-    await downloadModule(updateFiles.filter(x => x.type === module), workingDir)
-      .then(() => console.log(`${chalk.green("[UPDATED]")}: ${module} - ${chalk.greenBright("Done")}`))
-      .catch(e => console.log(`${chalk.red("[ERROR]")} could not update module ${module}: ${e}`))
-
-    return
-  })
-
-  let promise = modulePromiseChain[0]()
-  for (let i = 1; i < modulePromiseChain.length; i++)
-    await promise.then(modulePromiseChain[i])
-
-  return
-}*/
 
 async function uninstall() {
   console.log('uninstalling')
@@ -157,8 +75,8 @@ async function main() {
     return (await uninstall())
 
   else {
-    let branch = args.hasOwnProperty("branch") ? args.branch : null
-    let dir = args.hasOwnProperty("dir") ? args.dir : null
+    let branch = args.hasOwnProperty("branch") ? args.branch : "release"
+    let dir = args.hasOwnProperty("dir") ? args.dir : "./"
     let modules = []
 
     if (args.hasOwnProperty("csharp"))

@@ -9,3 +9,8 @@ server
 .altvrc
 test.js
 altv.js
+altv-server.exe
+AltV.Net.Host.dll
+AltV.Net.Host.runtimeconfig.json
+data/vehmodels.bin
+data/vehmods.bin
