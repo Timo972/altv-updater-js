@@ -14,9 +14,9 @@ function getUpdateFiles(os, branch) {
             type: 'js-module'
         },
         {
-            url: `https://cdn.altv.mp/js-module/${branch}/${os}/modules/js-module/${os == "x64_linux" ? `libnode.so.72` : `libnode.dll`}`,
+            url: `https://cdn.altv.mp/js-module/${branch}/${os}/modules/js-module/${os == "x64_linux" ? `libnode.so.${branch == 'dev' ? '83': '72'}` : `libnode.dll`}`,
             folder: `./modules/js-module`,
-            name: os == "x64_linux" ? `libnode.so.72` : `libnode.dll`,
+            name: os == "x64_linux" ? `libnode.so.${branch == 'dev' ? '83': '72'}` : `libnode.dll`,
             type: 'js-module'
         },
         //coreclr-module
@@ -55,6 +55,12 @@ function getUpdateFiles(os, branch) {
             url: `https://cdn.altv.mp/server/${branch}/${os}/data/vehmods.bin`,
             folder: `./data`,
             name: `vehmods.bin`,
+            type: 'server'
+        },
+        {
+            url: `https://cdn.altv.mp/server/${branch}/${os}/data/clothes.bin`,
+            folder: `./data`,
+            name: `clothes.bin`,
             type: 'server'
         },
         {
