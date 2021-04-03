@@ -2,6 +2,16 @@ const fs = require("fs")
 const { promisify } = require("util")
 const path = require('path')
 
+async function validConfig() {
+    if(fs.existsSync(path.join(process.cwd(), ".altvrc"))) {
+        const config = await readConfig()
+        const validProperties = "modules" in config && "dir" in config && "branch" in config;
+        const validTypes = config["modules"] instanceof Array && typeof config["dir"] === "string" && typeof config["branch"] === "string";
+        return validProperties && validTypes;
+    }
+    else return false
+}
+
 async function readConfig() {
     const result = await promisify(fs.readFile)(path.join(process.cwd(), ".altvrc"), {
         encoding: "utf8"
@@ -22,5 +32,6 @@ async function writeConfig(directory, branch, modules) {
 
 module.exports = {
     readConfig,
-    writeConfig
+    writeConfig,
+    validConfig
 }

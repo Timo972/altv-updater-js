@@ -1,63 +1,69 @@
 #!/usr/bin/env node
 
-const fs = require("fs")
-const path = require('path')
-const chalk = require("chalk")
-const { promisify } = require("util")
-const { readConfig, writeConfig } = require("../util/config")
-const { deleteServerFiles } = require("../actions/deleteServerFiles")
-const { runServer } = require("../actions/runServer")
-const { generateOthers } = require("../util/generateOthers")
-const { downloadServer } = require("../actions/downloadServerFiles")
+const fs = require("fs");
+const path = require("path");
+const chalk = require("chalk");
+const { promisify } = require("util");
+const { readConfig, writeConfig, validConfig } = require("../util/config");
+const { deleteServerFiles } = require("../actions/deleteServerFiles");
+const { runServer } = require("../actions/runServer");
+const { generateOthers } = require("../util/generateOthers");
+const { downloadServer } = require("../actions/downloadServerFiles");
 
-const os = `${process.arch}_${process.platform}`
+const os = `${process.arch}_${process.platform}`;
 
-if (os != 'x64_linux' && os != 'x64_win32')
-  throw new Error("Unsupported platform (" + os + ")")
+if (os != "x64_linux" && os != "x64_win32")
+  throw new Error("Unsupported platform (" + os + ")");
 
-let workingDir = process.cwd()
+let workingDir = process.cwd();
 
-function setWorkingDir(directory = './') {
-  workingDir = path.join(process.cwd(), directory)
+function setWorkingDir(directory = "./") {
+  workingDir = path.join(process.cwd(), directory);
 }
 
 async function uninstall() {
-  console.log('uninstalling')
+  console.log("uninstalling");
 
-  if (fs.existsSync(path.join(process.cwd(), '.altvrc'))) {
-    const config = await readConfig()
+  const isConfigValid = await validConfig().catch((e) =>
+    console.log(chalk.redBright("Invalid .altvrc"))
+  );
 
-    setWorkingDir(config.dir)
+  if (isConfigValid) {
+    const config = await readConfig();
 
-    await promisify(fs.unlink)(path.join(process.cwd(), '.altvrc'))
+    setWorkingDir(config.dir);
 
-    if (!fs.existsSync(workingDir))
-      return console.log('Already uninstalled')
+    await promisify(fs.unlink)(path.join(process.cwd(), ".altvrc"));
+
+    if (!fs.existsSync(workingDir)) return console.log("Already uninstalled");
 
     await deleteServerFiles(workingDir);
   } else {
-    await deleteServerFiles(__dirname);
+    await deleteServerFiles(process.cwd());
   }
-  console.log("Uninstalled alt:V Server")
+  console.log("Uninstalled alt:V Server");
 }
 
 async function getVersion() {
-  return (await promisify(fs.readFile)(path.join(__dirname, "package.json"))).version
+  return (await promisify(fs.readFile)(path.join(__dirname, "package.json")))
+    .version;
 }
 
 function isStartArg(x) {
-  if (typeof x != "string") return false
-  return x.charAt(0) === '-' && x.charAt(1) === '-'
+  if (typeof x != "string") return false;
+  return x.charAt(0) === "-" && x.charAt(1) === "-";
 }
 
 async function main() {
-  const args = {}
+  const args = {};
+  // custom arg parser
   process.argv.filter(isStartArg).forEach((arg) => {
-    let index = process.argv.indexOf(arg)
-    args[arg.substring(2, arg.length)] = process.argv[index + 1]
-  })
+    let index = process.argv.indexOf(arg);
+    args[arg.substring(2, arg.length)] = process.argv[index + 1];
+  });
 
-  if (args.hasOwnProperty('options') || args.hasOwnProperty('help'))
+  // log infos
+  if (args.hasOwnProperty("options") || args.hasOwnProperty("help"))
     return console.log(`
     Available options are:
     --dir [folder] : installs the server into a relative folder
@@ -66,67 +72,59 @@ async function main() {
     --uninstall : uninstalls the altv server
     --csharp : downloads coreclr - module with right branch
     --js : downloads js - module with right branch
-      `)
+      `);
 
+  // log version
   if (args.hasOwnProperty("version"))
-    return console.log("Running version: ", (await getVersion()))
+    return console.log("Running version: ", await getVersion());
 
-  if (args.hasOwnProperty('uninstall'))
-    return (await uninstall())
-
+  // run uninstall process
+  if (args.hasOwnProperty("uninstall")) return await uninstall();
+  //
   else {
-    let branch = args.hasOwnProperty("branch") ? args.branch : "release"
-    let dir = args.hasOwnProperty("dir") ? args.dir : "./"
-    let modules = []
+    // read config if exist
+    const config = (await validConfig().catch((e) =>
+      console.log(chalk.redBright("Invalid .altvrc"))
+    ))
+      ? await readConfig()
+      : null;
 
-    if (args.hasOwnProperty("csharp"))
-      modules.push("csharp-module")
+    // get branch from args, then from config, then default
+    let branch = args.hasOwnProperty("branch")
+      ? args.branch
+      : config != null
+      ? config.branch
+      : "release";
+    let dir = args.hasOwnProperty("dir")
+      ? args.dir
+      : config != null
+      ? config.dir
+      : "./";
+    let modules = config != null ? config.modules : [];
 
-    if (args.hasOwnProperty("js"))
-      modules.push("js-module")
+    if (args.hasOwnProperty("csharp") && !modules.includes("csharp-module"))
+      modules.push("csharp-module");
 
-    let config = {}
-
-    if (fs.existsSync(path.join(process.cwd(), ".altvrc")))
-      config = await readConfig()
-
-
-    if (config.hasOwnProperty("modules") && modules.length === 0)
-      modules = config.modules
+    if (args.hasOwnProperty("js") && !modules.includes("js-module"))
+      modules.push("js-module");
 
     if (modules instanceof Array && !modules.includes("server"))
-      modules.push("server")
+      modules.push("server");
 
-    if (modules.length === 0)
-      modules = ["server", "js-module"]
+    if (modules.length === 0) modules = ["server"];
 
+    // update config
+    await writeConfig(dir, branch, modules);
 
-    if (config.hasOwnProperty("branch") && branch == null)
-      branch = config.branch
-    else if (branch == null)
-      branch = "release"
+    await downloadServer(modules, branch, dir, os).catch((e) => {
+      console.error(e);
+      process.exit(1);
+    });
 
+    if (args.hasOwnProperty("others")) await generateOthers(os, dir);
 
-    if (config.hasOwnProperty("dir") && dir == null)
-      dir == config.dir
-    else if (dir == null)
-      dir = "./"
-
-    if (dir != "./" || branch != "release" || !modules.includes("js-module") || modules.includes("csharp-module"))
-      await writeConfig(dir, branch, modules)
-
-    await downloadServer(modules, branch, dir, os).catch(e => {
-      console.error(e)
-      process.exit(1)
-    })
-
-    if (args.hasOwnProperty('others'))
-      await generateOthers(os, dir)
-
-    if (args.hasOwnProperty('run'))
-      runServer()
+    if (args.hasOwnProperty("run")) runServer();
   }
-
 }
 
-main()
+main();
