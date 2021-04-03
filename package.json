@@ -1,6 +1,6 @@
 {
   "name": "altv-srv",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "An alt:V Multiplayer Server installer/updater (https://altv.mp)",
   "main": "lib/index.js",
   "dependencies": {
