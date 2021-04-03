@@ -45,7 +45,7 @@ async function uninstall() {
 }
 
 async function getVersion() {
-  return (await promisify(fs.readFile)(path.join(__dirname, "package.json")))
+  return JSON.parse(await promisify(fs.readFile)(path.join(__dirname, "..", "package.json")))
     .version;
 }
 
