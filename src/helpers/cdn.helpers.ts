@@ -109,7 +109,7 @@ export function getFiles (branch: string, os: string): IFile[] {
         {
             url: `https://cdn.altv.mp/voice-server/${branch}/${os}/update.json`,
             folder: `./`,
-            name: os == "x64_linux" ? `altv-voice-server` : `altv-voice-server.exe`,
+            name: 'update.json',
             type: 'voice'
         },
     ]

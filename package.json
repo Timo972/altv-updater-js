@@ -4,6 +4,9 @@
   "description": "alt:V Multiplayer Server and Module installer/updater",
   "main": "./dist/index.js",
   "module": "./dist/index.esm.js",
+  "bin": {
+    "altv-srv": "./dist/cli.js"
+  },
   "exports": {
     ".": {
       "require": "./dist/index.js",

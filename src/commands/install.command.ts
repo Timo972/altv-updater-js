@@ -4,10 +4,10 @@ import {exists, dirAsync, removeAsync } from 'fs-jetpack';
 import {yellowBright, blueBright, red, yellow} from 'chalk';
 import ora from 'ora';
 import { getFiles } from "../helpers/cdn.helpers";
-import {checkVersion} from "../helpers/util.helpers";
+import { checkVersion } from "../helpers/util.helpers";
 import { getAssetUrl, getRelease } from "../helpers/github.helpers";
 import { downloadFile } from "../helpers/download.helpers";
-import {generateServerConfig, generateStartScript} from "../helpers/scaffold";
+import { generateServerConfig, generateStartScript } from "../helpers/scaffold";
 // import { getConfig } from "../helpers/config.helpers";
 
 export const InstallCommand: CommandModule = {
@@ -69,8 +69,8 @@ export const InstallCommand: CommandModule = {
 
         if (isAbsolute(directory))
             directory = relative(directory, process.cwd());
-        else
-            directory = join(process.cwd(), directory);
+        //else
+        //    directory = join(process.cwd(), directory);
 
         if (!exists(directory))
             await dirAsync(directory);

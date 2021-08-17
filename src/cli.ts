@@ -1,6 +1,8 @@
+#!/usr/bin/env node
 import yargs from 'yargs';
 import {hideBin} from "yargs/helpers";
 import {InstallCommand} from "./commands/install.command";
+import {DeleteCommand} from "./commands/delete.command";
 
 const program = yargs(hideBin(process.argv))
     .scriptName('altv-srv')
@@ -10,7 +12,7 @@ const program = yargs(hideBin(process.argv))
     .wrap(120);
 
 program.command(InstallCommand);
-//program.command();
+program.command(DeleteCommand);
 //program.command();
 
 program
