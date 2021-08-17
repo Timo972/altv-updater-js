@@ -1,0 +1,43 @@
+{
+  "name": "altv-srv",
+  "version": "3.0.0",
+  "description": "alt:V Multiplayer Server and Module installer/updater",
+  "main": "./dist/index.js",
+  "module": "./dist/index.esm.js",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.esm.js"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Timo972/altv-updater-js.git"
+  },
+  "keywords": [],
+  "author": "Timo972",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Timo972/altv-updater-js/issues"
+  },
+  "homepage": "https://github.com/Timo972/altv-updater-js#readme",
+  "dependencies": {
+    "@octokit/core": "^3.5.1",
+    "chalk": "^4.1.2",
+    "fs-jetpack": "^4.1.1",
+    "lodash.isequal": "^4.5.0",
+    "ora": "^5.4.1",
+    "yargs": "^17.1.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.0.4",
+    "@types/lodash.isequal": "^4.5.5",
+    "@types/yargs": "^17.0.2",
+    "esbuild": "^0.12.20",
+    "rollup-plugin-esbuild": "^4.5.0"
+  }
+}
