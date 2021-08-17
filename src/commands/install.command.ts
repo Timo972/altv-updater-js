@@ -1,6 +1,6 @@
 import { Arguments, Argv, CommandModule } from 'yargs';
 import { isAbsolute, relative, join } from 'path';
-import { exists, dirAsync, removeAsync} from 'fs-jetpack';
+import {exists, dirAsync, removeAsync } from 'fs-jetpack';
 import {yellowBright, blueBright, red, yellow} from 'chalk';
 import ora from 'ora';
 import { getFiles } from "../helpers/cdn.helpers";
@@ -8,6 +8,7 @@ import {checkVersion} from "../helpers/util.helpers";
 import { getAssetUrl, getRelease } from "../helpers/github.helpers";
 import { downloadFile } from "../helpers/download.helpers";
 import {generateServerConfig, generateStartScript} from "../helpers/scaffold";
+// import { getConfig } from "../helpers/config.helpers";
 
 export const InstallCommand: CommandModule = {
     command: 'install <branch>',
@@ -78,6 +79,20 @@ export const InstallCommand: CommandModule = {
         // if (!exists(modulesPath))
         //   await dirAsync(modulesPath);
 
+        // const config = getConfig();
+        // config.modules = modules;
+        // config.branch = branch;
+
+        const voiceAndServer = modules.includes("server") && modules.includes("voice");
+
+        if (voiceAndServer) {
+            console.log(`${yellow('[WARN]')} Server and VoiceServer should not be installed into the same directory`);
+            return;
+        }
+
+        // TODO check if voice install when server is already there. use .altvrc to check for current installations. add custom property to config for voicePath
+
+
         console.log(yellowBright(`Downloading alt:V Server branch ${branch} with modules: ${blueBright(modules.join(", "))} into directory: ${directory}`));
 
         const files = getFiles(branch, os);
@@ -108,15 +123,6 @@ export const InstallCommand: CommandModule = {
                     console.log(`${red('[ERROR]')} ${githubRelease}`);
                     return false;
                 }
-
-                const voiceAndServer = modules.includes("server") && modules.includes("voice");
-
-                if (voiceAndServer) {
-                    console.log(`${yellow('[WARNING]')} Server and VoiceServer should not be installed into the same directory`);
-                    return false;
-                }
-
-                // TODO check if voice install when server is already there. use .altvrc to check for current installations. add custom property to config for voicePath
 
                 for (const file of moduleFiles) {
                     if (file.name == null) {

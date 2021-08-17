@@ -37,6 +37,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@types/lodash.isequal": "^4.5.5",
+    "@types/rc": "^1.2.0",
     "@types/yargs": "^17.0.2",
     "esbuild": "^0.12.20",
     "rollup-plugin-esbuild": "^4.5.0"
