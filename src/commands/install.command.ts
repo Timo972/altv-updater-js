@@ -1,7 +1,7 @@
 import { Arguments, Argv, CommandModule } from 'yargs';
 import { isAbsolute, relative, join } from 'path';
 import { exists, dirAsync, removeAsync} from 'fs-jetpack';
-import { yellowBright, blueBright, red } from 'chalk';
+import {yellowBright, blueBright, red, yellow} from 'chalk';
 import ora from 'ora';
 import { getFiles } from "../helpers/cdn.helpers";
 import {checkVersion} from "../helpers/util.helpers";
@@ -37,7 +37,7 @@ export const InstallCommand: CommandModule = {
                     'server'
                 ],
                 type: "array",
-                default: ['js']
+                default: ['server','js']
             })
             .positional('directory', {
                 alias: [
@@ -58,11 +58,11 @@ export const InstallCommand: CommandModule = {
     async handler(args: Arguments<{ branch: string, modules: string[], directory: string, others: boolean }>): Promise<void> {
         let { branch, modules, directory, others } = args;
         const os = `${process.arch}_${process.platform}`;
-        const moduleAliases = { 'js': 'js-module', 'py': 'python-module', 'c#': 'csharp-module', 'cs': 'csharp-module', 'as': 'angelscript-module' };
+        const moduleAliases = { 'js': 'js-module', 'py': 'python-module', 'c#': 'csharp-module', 'cs': 'csharp-module', 'as': 'angelscript-module', 'go': 'go-module' };
 
         modules = [...new Set(modules.map(m => Object.keys(moduleAliases).includes(m) ? moduleAliases[m] : m ))]
 
-        if (modules.filter(m => isModuleValid(m)).length > 0)
+        if (modules.filter(m => !isModuleValid(m)).length > 0)
             throw new Error(`Please specify only valid modules e.g js-module`);
 
         if (isAbsolute(directory))
@@ -100,13 +100,22 @@ export const InstallCommand: CommandModule = {
                 const moduleFiles = files.filter(f => f.type === module);
                 const isGithubHosted = moduleFiles[0].isGithubRelease === true;
 
-                const [owner, repo, branch] = moduleFiles[0].url;
+                const [owner, repo, branch] = moduleFiles[0].url.split('/');
                 const githubRelease = isGithubHosted ? await getRelease(owner, repo, branch) : null;
 
                 if (typeof githubRelease === "string") {
                     console.log(`${red('[ERROR]')} ${githubRelease}`);
                     return false;
                 }
+
+                const voiceAndServer = modules.includes("server") && modules.includes("voice");
+
+                if (voiceAndServer) {
+                    console.log(`${yellow('[WARNING]')} Server and VoiceServer should not be installed into the same directory`);
+                    return false;
+                }
+
+                // TODO check if voice install when server is already there. use .altvrc to check for current installations. add custom property to config for voicePath
 
                 for (const file of moduleFiles) {
                     if (file.name == null) {
@@ -151,6 +160,10 @@ export const InstallCommand: CommandModule = {
 
             return true;
         });
+
+        let promise = moduleDownloadChain[0]()
+        for (let i = 1; i < moduleDownloadChain.length; i++)
+            await promise.then(moduleDownloadChain[i])
     }
 }
 

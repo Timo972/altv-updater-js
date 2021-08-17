@@ -69,6 +69,7 @@ export async function getRelease(owner: string, repo: string, branch: string): P
 
         return release;
     } catch (e) {
+        console.log(e)
         return "Could not get github release";
     }
 }

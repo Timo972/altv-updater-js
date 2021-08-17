@@ -1,20 +1,21 @@
 import { get } from 'https';
 import { createWriteStream } from 'fs-jetpack';
 
-function isRedirect(): boolean {
-    return false;
+function isRedirect(headers: object): boolean {
+    return "location" in headers;
 }
 
-function getRedirectUrl(): string {
-    return '';
+function getRedirectUrl(headers: object): string {
+    //@ts-ignore
+    return headers.location;
 }
 
 export function downloadFile(url: string, dest: string): Promise<boolean> {
     return new Promise(resolve => {
        get(url, (resp) => {
 
-           if (isRedirect()) {
-                downloadFile(getRedirectUrl(), dest).then(resolve);
+           if (isRedirect(resp.headers)) {
+                downloadFile(getRedirectUrl(resp.headers), dest).then(resolve);
                 return;
            }
 
