@@ -7,6 +7,7 @@ import { getFiles } from "../helpers/cdn.helpers";
 import {checkVersion} from "../helpers/util.helpers";
 import { getAssetUrl, getRelease } from "../helpers/github.helpers";
 import { downloadFile } from "../helpers/download.helpers";
+import {generateServerConfig, generateStartScript} from "../helpers/scaffold";
 
 export const InstallCommand: CommandModule = {
     command: 'install <branch>',
@@ -164,6 +165,12 @@ export const InstallCommand: CommandModule = {
         let promise = moduleDownloadChain[0]()
         for (let i = 1; i < moduleDownloadChain.length; i++)
             await promise.then(moduleDownloadChain[i])
+
+        if (others) {
+            generateServerConfig(directory, modules);
+            if (os === "x64_linux")
+                await generateStartScript(directory);
+        }
     }
 }
 
