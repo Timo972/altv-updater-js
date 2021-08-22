@@ -7,7 +7,7 @@ import { getFiles } from "../helpers/cdn.helpers";
 import { checkVersion } from "../helpers/util.helpers";
 import { getAssetUrl, getRelease } from "../helpers/github.helpers";
 import { downloadFile } from "../helpers/download.helpers";
-import { generateServerConfig, generateStartScript } from "../helpers/scaffold";
+import { generateServerConfig, generateStartScript } from "../helpers/scaffold.helpers";
 // import { getConfig } from "../helpers/config.helpers";
 
 export const InstallCommand: CommandModule = {
