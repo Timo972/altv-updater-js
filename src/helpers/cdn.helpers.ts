@@ -6,7 +6,7 @@ export type IFile = {
     isGithubRelease?: boolean;
 }
 
-export function getFiles (branch: string, os: string): IFile[] {
+export function getFiles(branch: string, os: string): IFile[] {
     return [
         //go-module
         {
@@ -38,9 +38,9 @@ export function getFiles (branch: string, os: string): IFile[] {
             type: 'js-module'
         },
         {
-            url: `https://cdn.altv.mp/js-module/${branch}/${os}/modules/js-module/${os == "x64_linux" ? `libnode.so.${branch == 'dev' ? '83': '72'}` : `libnode.dll`}`,
+            url: `https://cdn.altv.mp/js-module/${branch}/${os}/modules/js-module/${os == "x64_linux" ? `libnode.so.${branch == 'dev' ? '83' : '72'}` : `libnode.dll`}`,
             folder: `./modules/js-module`,
-            name: os == "x64_linux" ? `libnode.so.${branch == 'dev' ? '83': '72'}` : `libnode.dll`,
+            name: os == "x64_linux" ? `libnode.so.${branch == 'dev' ? '83' : '72'}` : `libnode.dll`,
             type: 'js-module'
         },
         //coreclr-module

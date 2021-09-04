@@ -1,13 +1,13 @@
-import { join } from 'path';
-import { exists, readAsync } from 'fs-jetpack';
-import { get } from 'https';
+import {join} from 'path';
+import {exists, readAsync} from 'fs-jetpack';
+import {get} from 'https';
 import IsEqual from 'lodash.isequal';
-import { IFile } from './cdn.helpers';
+import {IFile} from './cdn.helpers';
 
 export async function checkVersion(file: IFile, wd: string): Promise<boolean> {
-    const fileDest =  join(wd, file.folder, file.name);
+    const fileDest = join(wd, file.folder, file.name);
 
-    if(!exists(fileDest))
+    if (!exists(fileDest))
         return false;
 
     try {

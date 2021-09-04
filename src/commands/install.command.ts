@@ -1,13 +1,13 @@
-import { Arguments, Argv, CommandModule } from 'yargs';
-import { isAbsolute, relative, join } from 'path';
-import {exists, dirAsync, removeAsync } from 'fs-jetpack';
+import {Arguments, Argv, CommandModule} from 'yargs';
+import {isAbsolute, relative, join} from 'path';
+import {exists, dirAsync, removeAsync} from 'fs-jetpack';
 import {yellowBright, blueBright, red, yellow} from 'chalk';
 import ora from 'ora';
-import { getFiles } from "../helpers/cdn.helpers";
-import { checkVersion } from "../helpers/util.helpers";
-import { getAssetUrl, getRelease } from "../helpers/github.helpers";
-import { downloadFile } from "../helpers/download.helpers";
-import { generateServerConfig, generateStartScript } from "../helpers/scaffold.helpers";
+import {getFiles} from "../helpers/cdn.helpers";
+import {checkVersion} from "../helpers/util.helpers";
+import {getAssetUrl, getRelease} from "../helpers/github.helpers";
+import {downloadFile} from "../helpers/download.helpers";
+import {generateServerConfig, generateStartScript} from "../helpers/scaffold.helpers";
 // import { getConfig } from "../helpers/config.helpers";
 
 export const InstallCommand: CommandModule = {
@@ -39,7 +39,7 @@ export const InstallCommand: CommandModule = {
                     'server'
                 ],
                 type: "array",
-                default: ['server','js']
+                default: ['server', 'js']
             })
             .positional('directory', {
                 alias: [
@@ -51,18 +51,25 @@ export const InstallCommand: CommandModule = {
                 default: "./"
             })
             .option('others', {
-               alias: 'o',
-               describe: 'Generate server.cfg and on linux start.sh',
-               type: "boolean",
-               default: false
+                alias: 'o',
+                describe: 'Generate server.cfg and on linux start.sh',
+                type: "boolean",
+                default: false
             });
     },
     async handler(args: Arguments<{ branch: string, modules: string[], directory: string, others: boolean }>): Promise<void> {
-        let { branch, modules, directory, others } = args;
+        let {branch, modules, directory, others} = args;
         const os = `${process.arch}_${process.platform}`;
-        const moduleAliases = { 'js': 'js-module', 'py': 'python-module', 'c#': 'csharp-module', 'cs': 'csharp-module', 'as': 'angelscript-module', 'go': 'go-module' };
+        const moduleAliases = {
+            'js': 'js-module',
+            'py': 'python-module',
+            'c#': 'csharp-module',
+            'cs': 'csharp-module',
+            'as': 'angelscript-module',
+            'go': 'go-module'
+        };
 
-        modules = [...new Set(modules.map(m => Object.keys(moduleAliases).includes(m) ? moduleAliases[m] : m ))]
+        modules = [...new Set(modules.map(m => Object.keys(moduleAliases).includes(m) ? moduleAliases[m] : m))]
 
         if (modules.filter(m => !isModuleValid(m)).length > 0)
             throw new Error(`Please specify only valid modules e.g js-module`);

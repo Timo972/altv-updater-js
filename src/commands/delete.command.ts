@@ -1,9 +1,9 @@
-import { Arguments, Argv, CommandModule } from 'yargs';
-import { isAbsolute, relative, join } from 'path';
-import { exists, removeAsync } from 'fs-jetpack';
-import { yellowBright, blueBright, red, yellow } from 'chalk';
+import {Arguments, Argv, CommandModule} from 'yargs';
+import {isAbsolute, relative, join} from 'path';
+import {exists, removeAsync} from 'fs-jetpack';
+import {yellowBright, blueBright, red, yellow} from 'chalk';
 import ora from 'ora';
-import { getFiles } from "../helpers/cdn.helpers";
+import {getFiles} from "../helpers/cdn.helpers";
 
 const hardRegistry = [
     'server.cfg',
@@ -34,15 +34,15 @@ export const DeleteCommand: CommandModule = {
                 default: false
             });
     },
-    async handler(args: Arguments<{directory: string, hard: boolean}>) {
-        let { directory, hard } = args;
+    async handler(args: Arguments<{ directory: string, hard: boolean }>) {
+        let {directory, hard} = args;
         const os = `${process.arch}_${process.platform}`;
         const branches = ['release', 'rc', 'dev'];
 
         if (isAbsolute(directory))
             directory = relative(directory, process.cwd());
 
-        console.log(yellowBright(`Deleting alt:V Server${hard?` and all its contents`:''} from directory: ${directory}`));
+        console.log(yellowBright(`Deleting alt:V Server${hard ? ` and all its contents` : ''} from directory: ${directory}`));
 
         for (const branch of branches) {
             const files = getFiles(branch, os);

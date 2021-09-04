@@ -1,4 +1,4 @@
-import { Octokit } from '@octokit/core';
+import {Octokit} from '@octokit/core';
 
 const octokit = new Octokit();
 
@@ -51,8 +51,8 @@ export function getAssetUrl(release: IGithubRelease, name: string): string | nul
 export async function getRelease(owner: string, repo: string, branch: string): Promise<IGithubRelease | string> {
     try {
         const releases = await octokit.request('GET /repos/{owner}/{repo}/releases', {
-           owner,
-           repo
+            owner,
+            repo
         });
 
         if (releases == undefined || !(releases.data instanceof Array)) {

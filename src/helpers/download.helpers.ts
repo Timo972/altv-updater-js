@@ -1,5 +1,5 @@
-import { get } from 'https';
-import { createWriteStream } from 'fs-jetpack';
+import {get} from 'https';
+import {createWriteStream} from 'fs-jetpack';
 
 function isRedirect(headers: object): boolean {
     return "location" in headers;
@@ -12,22 +12,22 @@ function getRedirectUrl(headers: object): string {
 
 export function downloadFile(url: string, dest: string): Promise<boolean> {
     return new Promise(resolve => {
-       get(url, (resp) => {
+        get(url, (resp) => {
 
-           if (isRedirect(resp.headers)) {
+            if (isRedirect(resp.headers)) {
                 downloadFile(getRedirectUrl(resp.headers), dest).then(resolve);
                 return;
-           }
+            }
 
-           const writeStream = createWriteStream(dest);
+            const writeStream = createWriteStream(dest);
 
-           resp.pipe(writeStream);
+            resp.pipe(writeStream);
 
-           resp.on('error', e => resolve(false));
-           writeStream.on('error', e => resolve(false));
-           writeStream.on('finish', () => resolve(true));
-       })
-           .on('abort', () => resolve(false))
-           .on('error', e => resolve(false));
+            resp.on('error', e => resolve(false));
+            writeStream.on('error', e => resolve(false));
+            writeStream.on('finish', () => resolve(true));
+        })
+            .on('abort', () => resolve(false))
+            .on('error', e => resolve(false));
     });
 }
