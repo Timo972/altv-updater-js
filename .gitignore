@@ -14,3 +14,7 @@ AltV.Net.Host.dll
 AltV.Net.Host.runtimeconfig.json
 data/vehmodels.bin
 data/vehmods.bin
+dist
+.idea
+data
+server.cfg

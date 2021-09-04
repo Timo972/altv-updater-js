@@ -1,52 +1,76 @@
-# altv-srv - an alt:V Multiplayer Server installer / updater
-## Requirements
-  - node >= 12
+# altv-srv -- alt:V Multiplayer Server installer / updater
 
+---
 ## how-to-install
-```css
-// installing the installer and its needed packages
+```bash
+# installing the installer and its needed packages
 npm i -g altv-srv
-// notice the installer needs the .altvrc if its generating it -> DONT DELETE
 ```
+---
 ## Advantages
-- Minimal dependencies
-- Pretty console prints
-- C#-Module support
-
+- fast
+- pretty console prints
+- c#-Module support
+- go-module support
+- angelscript-module support
+- python-module support
+- js-module support
+- altv-voice-server support
+- only update if outdated
+---
 ## CLI-usage
-```css
-altv-srv [--options]
+```bash
+Usage: altv-srv <cmd> [options]
+
+Commands:
+altv-srv install <branch>  Install alt:V Multiplayer server and its modules   [aliases: i]
+altv-srv delete            Delete the alt:V Multiplayer server and its files  [aliases: d]
+
+Options:
+--version  Show version number                                                [boolean]
+-h, --help     Show help                                                      [boolean]
+
 ```
-## Options
- - ``--branch [branch]`` selects the servers update channel
- - ``--others`` generates server.cfg, start.sh (only on linux), resources folder, cache folder
- - ``--uninstall`` deletes cache, serverfiles, ect.
- - ``--dir [my-altv-server-folder]`` installs the altv server into specified folder
- - ``--csharp`` flag downloads the csharp module
- - ``--js`` flag downloads the js module
 
+### Install options
+```bash
+altv-srv install <branch>
+
+Install alt:V Multiplayer server and its modules
+
+Positionals:
+  directory, dir, d  Set relative server path                   [string] [default: "./"]
+
+Options:
+      --version  Show version number                            [boolean]
+  -h, --help     Show help                                      [boolean]
+  -m, --modules  Specify modules to download
+         [array] [choices: "js", "javascript", "c#", "cs", 
+                           "csharp", "go", "as", "angelscript", 
+                           "py", "python", "voice", "server"] 
+                           [default: ["server","js"]]
+  -o, --others   Generate server.cfg and on linux start.sh      [boolean] [default: false]
+
+```
+
+### Delete options
+```bash
+altv-srv delete
+
+Delete the alt:V Multiplayer server and its files
+
+Positionals:
+  directory, dir, d  Set relative server path        [string] [default: "./"]
+
+Options:
+      --version  Show version number                 [boolean]
+  -h, --help     Show help                           [boolean]
+      --hard     Remove server.cfg, logs, resources  [boolean] [default: false]
+```
+---
 ## script usage
-```js
-const altServer = require("altv-srv");
+Not supported currently
 
-const altServerDir = "./";
+---
 
-async function downloadAltVServer() {
-
-  await altServer.download(altServerDir, "release", ["server", "js-module", "csharp-module"])
-  .catch(e => console.log(`could not download server: ${e}`));
-
-  await altServer.generateOthers(altServerDir);
-
-}
-
-async function uninstallAltVServer() {
-
-  await altServer.remove(altServerDir).catch(e => console.log(`could not delete server: ${e}`));
-
-}
-  ```
-## Bugs
- - no known bugs
-
-If you notice something you think its not intended feel free to open an issue
+### If you notice something you think its not intended feel free to open an issue
