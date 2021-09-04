@@ -1,6 +1,6 @@
 {
   "name": "altv-srv",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "alt:V Multiplayer Server and Module installer/updater",
   "main": "./dist/index.js",
   "module": "./dist/index.esm.js",
