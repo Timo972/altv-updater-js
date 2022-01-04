@@ -30,7 +30,7 @@
   "homepage": "https://github.com/Timo972/altv-updater-js#readme",
   "dependencies": {
     "@octokit/core": "^3.5.1",
-    "cfg-reader": "^2.3.0",
+    "cfg-reader": "^3.0.1",
     "chalk": "^4.1.2",
     "fs-jetpack": "^4.1.1",
     "lodash.isequal": "^4.5.0",
