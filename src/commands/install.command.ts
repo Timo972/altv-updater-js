@@ -72,11 +72,14 @@ export const InstallCommand: CommandModule = {
     const os = `${process.arch}_${process.platform}`;
     const moduleAliases = {
       js: "js-module",
+      javascript: "js-module",
       py: "python-module",
+      python: "python-module",
       "c#": "csharp-module",
       cs: "csharp-module",
       csharp: "csharp-module",
       as: "angelscript-module",
+      angelscript: "angelscript-module",
       go: "go-module",
       jsb: "js-bytecode-module",
       bytecode: "js-bytecode-module",
