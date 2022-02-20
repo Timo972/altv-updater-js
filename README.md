@@ -15,6 +15,7 @@ npm i -g altv-srv
 - angelscript-module support
 - python-module support
 - js-module support
+- js-bytecode-module support
 - altv-voice-server support
 - only update if outdated
 ---
@@ -47,7 +48,8 @@ Options:
   -m, --modules  Specify modules to download
          [array] [choices: "js", "javascript", "c#", "cs", 
                            "csharp", "go", "as", "angelscript", 
-                           "py", "python", "voice", "server"] 
+                           "py", "python", "voice", "server",
+                           "jsb", "js-bytecode", "bytecode"] 
                            [default: ["server","js"]]
   -o, --others   Generate server.cfg and on linux start.sh      [boolean] [default: false]
 
