@@ -11,9 +11,9 @@ npm i -g altv-srv
 - fast
 - pretty console prints
 - c#-Module support
-- go-module support
+- go-module support (unfinished)
 - angelscript-module support
-- python-module support
+- python-module support (once it's finished)
 - js-module support
 - js-bytecode-module support
 - altv-voice-server support
