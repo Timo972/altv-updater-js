@@ -18,3 +18,7 @@ data
 cache
 .idea
 .gitignore
+rollup.config.js
+tsconfig.json
+test
+src

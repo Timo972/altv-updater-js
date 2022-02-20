@@ -1,6 +1,6 @@
 {
   "name": "altv-srv",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "alt:V Multiplayer Server and Module installer/updater",
   "main": "./dist/index.js",
   "module": "./dist/index.esm.js",
@@ -15,7 +15,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "esbuild src/cli.ts --bundle --minify --outfile=dist/cli.js --platform=node --format=cjs --external:yargs --external:ora --external:@octokit/core --external:chalk --external:fs-jetpack --external:lodash.isequal",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -38,11 +39,10 @@
     "yargs": "^17.1.1"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^13.0.4",
     "@types/lodash.isequal": "^4.5.5",
     "@types/rc": "^1.2.0",
     "@types/yargs": "^17.0.2",
-    "esbuild": "^0.12.20",
-    "rollup-plugin-esbuild": "^4.5.0"
+    "esbuild": "^0.12.29",
+    "typescript": "^4.5.5"
   }
 }
