@@ -33,6 +33,14 @@ Options:
 
 ```
 
+## Example
+```bash
+# Install full server (server + data) & js + js-bytecode module
+altv-srv install release -d ./my-server -m server data js js-bytecode
+### Notice:
+# To be able to run the server you have to at least install server & data
+```
+
 ### Install options
 ```bash
 altv-srv install <branch>
