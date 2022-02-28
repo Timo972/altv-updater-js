@@ -43,9 +43,10 @@ export const InstallCommand: CommandModule = {
           "jsb",
           "js-bytecode",
           "bytecode",
+          "data",
         ],
         type: "array",
-        default: ["server", "js"],
+        default: ["server", "data", "js"],
       })
       .positional("directory", {
         alias: ["dir", "d"],

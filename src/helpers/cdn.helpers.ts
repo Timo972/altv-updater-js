@@ -81,25 +81,32 @@ export function getFiles(branch: string, os: string): IFile[] {
       name: os == "x64_linux" ? `AltV.Net.Host.dll` : `AltV.Net.Host.dll`,
       type: "csharp-module",
     },
-    //server
+    //data
     {
-      url: `https://cdn.altv.mp/server/${branch}/${os}/data/vehmodels.bin`,
+      url: `https://cdn.altv.mp/data/${branch}/vehmodels.bin`,
       folder: `./data`,
       name: `vehmodels.bin`,
-      type: "server",
+      type: "data",
     },
     {
-      url: `https://cdn.altv.mp/server/${branch}/${os}/data/vehmods.bin`,
+      url: `https://cdn.altv.mp/data/${branch}/vehmods.bin`,
       folder: `./data`,
       name: `vehmods.bin`,
-      type: "server",
+      type: "data",
     },
     {
-      url: `https://cdn.altv.mp/server/${branch}/${os}/data/clothes.bin`,
+      url: `https://cdn.altv.mp/data/${branch}/clothes.bin`,
       folder: `./data`,
       name: `clothes.bin`,
-      type: "server",
+      type: "data",
     },
+    {
+      url: `https://cdn.altv.mp/data/${branch}/update.json`,
+      folder: `./data`,
+      name: `update.json`,
+      type: "data",
+    },
+    //server
     {
       url: `https://cdn.altv.mp/server/${branch}/${os}/update.json`,
       folder: `./`,
