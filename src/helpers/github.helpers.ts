@@ -1,6 +1,6 @@
-import { Octokit } from "@octokit/core";
+import { Octokit } from "@octokit/core"
 
-const octokit = new Octokit();
+const octokit = new Octokit()
 
 export interface IGithubAsset {
   url: string;
@@ -42,13 +42,13 @@ export function getAssetUrl(
   release: IGithubRelease,
   name: string
 ): string | null {
-  const asset = release.assets.find((a) => a.name == name);
+  const asset = release.assets.find((a) => a.name == name)
 
   if (asset == undefined) {
-    return null;
+    return null
   }
 
-  return asset.browser_download_url;
+  return asset.browser_download_url
 }
 
 export async function getRelease(
@@ -63,10 +63,10 @@ export async function getRelease(
         owner,
         repo,
       }
-    );
+    )
 
     if (releases == undefined || !(releases.data instanceof Array)) {
-      return "Could not find repo";
+      return "Could not find repo"
     }
 
     const release = (releases.data as IGithubRelease[])
@@ -74,15 +74,15 @@ export async function getRelease(
       .sort(
         (a, b): number =>
           Number(new Date(a.published_at)) - Number(new Date(b.published_at))
-      )[0];
+      )[0]
 
     if (release == undefined) {
-      return "Could not find release for current branch";
+      return "Could not find release for current branch"
     }
 
-    return release;
+    return release
   } catch (e) {
-    console.log(e);
-    return "Could not get github release";
+    console.log(e)
+    return "Could not get github release"
   }
 }

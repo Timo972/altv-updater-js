@@ -152,5 +152,5 @@ export function getFiles(branch: string, os: "win32" | "unix"): IFile[] {
       folder: `./modules/js-bytecode-module`,
       name: "update.json",
     },
-  ];
+  ]
 }

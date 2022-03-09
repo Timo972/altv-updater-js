@@ -1,6 +1,6 @@
-import { Config } from "cfg-reader";
-import { join } from "path";
-import { writeAsync } from "fs-jetpack";
+import { Config } from "cfg-reader"
+import { join } from "path"
+import { writeAsync } from "fs-jetpack"
 
 export function generateServerConfig(path: string, modules: string[]): void {
   new Config(join(path, "server.cfg"), {
@@ -10,7 +10,7 @@ export function generateServerConfig(path: string, modules: string[]): void {
     players: 1024,
     modules: modules.filter((m) => m !== "server" && m !== "data"),
     resources: [],
-  }).save(false, false);
+  }).save(false, false)
 }
 
 export async function generateStartScript(path: string): Promise<void> {
@@ -22,5 +22,5 @@ BASEDIR = $(dirname $0)
 export LD_LIBRARY_PATH =\${BASEDIR}
 ./altv-server
 `
-  );
+  )
 }

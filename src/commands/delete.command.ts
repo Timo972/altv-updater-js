@@ -1,9 +1,9 @@
-import { Arguments, Argv, CommandModule } from "yargs";
-import { isAbsolute, relative, join } from "path";
-import { exists, removeAsync } from "fs-jetpack";
-import { yellowBright } from "chalk";
-import ora from "ora";
-import { getFiles } from "../helpers/cdn.helpers";
+import { Arguments, Argv, CommandModule } from "yargs"
+import { isAbsolute, relative, join } from "path"
+import { exists, removeAsync } from "fs-jetpack"
+import { yellowBright } from "chalk"
+import ora from "ora"
+import { getFiles } from "../helpers/cdn.helpers"
 
 const hardRegistry = [
   "server.cfg",
@@ -11,7 +11,7 @@ const hardRegistry = [
   "crashdumps",
   "cache",
   "resources",
-];
+]
 
 export const DeleteCommand: CommandModule = {
   command: "delete",
@@ -29,16 +29,16 @@ export const DeleteCommand: CommandModule = {
         describe: "Remove server.cfg, logs, resources",
         type: "boolean",
         default: false,
-      });
+      })
   },
   async handler(args: Arguments<{ directory: string; hard: boolean }>) {
     /* eslint-disable */
     let { directory, hard } = args;
     /* eslint-enable */
-    const os = `${process.arch}_${process.platform}`;
-    const branches = ["release", "rc", "dev"];
+    const os = `${process.arch}_${process.platform}`
+    const branches = ["release", "rc", "dev"]
 
-    if (isAbsolute(directory)) directory = relative(directory, process.cwd());
+    if (isAbsolute(directory)) directory = relative(directory, process.cwd())
 
     console.log(
       yellowBright(
@@ -46,41 +46,41 @@ export const DeleteCommand: CommandModule = {
           hard ? ` and all its contents` : ""
         } from directory: ${directory}`
       )
-    );
+    )
 
     for (const branch of branches) {
-      const files = getFiles(branch, os === "x64_win32" ? "win32" : "unix");
+      const files = getFiles(branch, os === "x64_win32" ? "win32" : "unix")
 
       for (const file of files) {
-        const fileDest = join(directory, file.folder, file.name);
-        const fileDestFolder = join(directory, file.folder);
+        const fileDest = join(directory, file.folder, file.name)
+        const fileDestFolder = join(directory, file.folder)
 
-        if (!exists(fileDestFolder)) continue;
+        if (!exists(fileDestFolder)) continue
 
         if (file.folder !== "./" && exists(fileDestFolder)) {
-          const spinner = ora(`Deleting folder ${yellowBright(file.folder)}`);
-          await removeAsync(fileDestFolder);
-          spinner.text = `Deleted folder ${yellowBright(file.folder)}`;
-          spinner.succeed();
+          const spinner = ora(`Deleting folder ${yellowBright(file.folder)}`)
+          await removeAsync(fileDestFolder)
+          spinner.text = `Deleted folder ${yellowBright(file.folder)}`
+          spinner.succeed()
         } else if (exists(fileDest)) {
-          const spinner = ora(`Deleting file ${yellowBright(file.name)}`);
-          await removeAsync(fileDest);
-          spinner.text = `Deleted file ${yellowBright(file.name)}`;
-          spinner.succeed();
+          const spinner = ora(`Deleting file ${yellowBright(file.name)}`)
+          await removeAsync(fileDest)
+          spinner.text = `Deleted file ${yellowBright(file.name)}`
+          spinner.succeed()
         }
       }
     }
 
     if (hard) {
       for (const fileOrFolder of hardRegistry) {
-        const path = join(directory, fileOrFolder);
+        const path = join(directory, fileOrFolder)
 
         if (exists(path)) {
-          const spinner = ora(`Deleting ${path}`);
-          await removeAsync(path);
-          spinner.succeed();
+          const spinner = ora(`Deleting ${path}`)
+          await removeAsync(path)
+          spinner.succeed()
         }
       }
     }
   },
-};
+}
