@@ -6,14 +6,14 @@ export type IFile = {
   isGithubRelease?: boolean;
 };
 
-export function getFiles(branch: string, os: string): IFile[] {
+export function getFiles(branch: string, os: "win32" | "unix"): IFile[] {
   return [
     //go-module
     {
       url: `shockdev04/altv-go-module/${branch}/${os}`,
       folder: `./modules`,
       type: "go-module",
-      name: os == "x64_linux" ? "libgo-module.so" : "go-module.dll",
+      name: os == "unix" ? "libgo-module.so" : "go-module.dll",
       isGithubRelease: true,
     },
     //angelscript-module
@@ -21,7 +21,7 @@ export function getFiles(branch: string, os: string): IFile[] {
       url: `LeonMrBonnie/altv-angelscript-module/${branch}/${os}`,
       folder: `./modules`,
       type: "angelscript-module",
-      name: os == "x64_linux" ? null : "angelscript-module.dll",
+      name: os == "unix" ? null : "angelscript-module.dll",
       isGithubRelease: true,
     },
     //js-module
@@ -33,21 +33,21 @@ export function getFiles(branch: string, os: string): IFile[] {
     },
     {
       url: `https://cdn.altv.mp/js-module/${branch}/${os}/modules/js-module/${
-        os == "x64_linux" ? `libjs-module.so` : `js-module.dll`
+        os == "unix" ? `libjs-module.so` : `js-module.dll`
       }`,
       folder: `./modules/js-module`,
-      name: os == "x64_linux" ? `libjs-module.so` : `js-module.dll`,
+      name: os == "unix" ? `libjs-module.so` : `js-module.dll`,
       type: "js-module",
     },
     {
       url: `https://cdn.altv.mp/js-module/${branch}/${os}/modules/js-module/${
-        os == "x64_linux"
+        os == "unix"
           ? `libnode.so.${branch == "dev" ? "83" : "72"}`
           : `libnode.dll`
       }`,
       folder: `./modules/js-module`,
       name:
-        os == "x64_linux"
+        os == "unix"
           ? `libnode.so.${branch == "dev" ? "83" : "72"}`
           : `libnode.dll`,
       type: "js-module",
@@ -61,10 +61,10 @@ export function getFiles(branch: string, os: string): IFile[] {
     },
     {
       url: `https://cdn.altv.mp/coreclr-module/${branch}/${os}/modules/${
-        os == "x64_linux" ? `libcsharp-module.so` : `csharp-module.dll`
+        os == "unix" ? `libcsharp-module.so` : `csharp-module.dll`
       }`,
       folder: `./modules/csharp-module`,
-      name: os == "x64_linux" ? `libcsharp-module.so` : `csharp-module.dll`,
+      name: os == "unix" ? `libcsharp-module.so` : `csharp-module.dll`,
       type: "csharp-module",
     },
     {
@@ -75,10 +75,10 @@ export function getFiles(branch: string, os: string): IFile[] {
     },
     {
       url: `https://cdn.altv.mp/coreclr-module/${branch}/${os}/${
-        os == "x64_linux" ? `AltV.Net.Host.dll` : `AltV.Net.Host.dll`
+        os == "unix" ? `AltV.Net.Host.dll` : `AltV.Net.Host.dll`
       }`,
       folder: `./`,
-      name: os == "x64_linux" ? `AltV.Net.Host.dll` : `AltV.Net.Host.dll`,
+      name: os == "unix" ? `AltV.Net.Host.dll` : `AltV.Net.Host.dll`,
       type: "csharp-module",
     },
     //data
@@ -115,19 +115,19 @@ export function getFiles(branch: string, os: string): IFile[] {
     },
     {
       url: `https://cdn.altv.mp/server/${branch}/${os}/${
-        os == "x64_linux" ? `altv-server` : `altv-server.exe`
+        os == "unix" ? `altv-server` : `altv-server.exe`
       }`,
       folder: `./`,
-      name: os == "x64_linux" ? `altv-server` : `altv-server.exe`,
+      name: os == "unix" ? `altv-server` : `altv-server.exe`,
       type: "server",
     },
     // voice
     {
       url: `https://cdn.altv.mp/voice-server/${branch}/${os}/${
-        os == "x64_linux" ? `altv-voice-server` : `altv-voice-server.exe`
+        os == "unix" ? `altv-voice-server` : `altv-voice-server.exe`
       }`,
       folder: `./`,
-      name: os == "x64_linux" ? `altv-voice-server` : `altv-voice-server.exe`,
+      name: os == "unix" ? `altv-voice-server` : `altv-voice-server.exe`,
       type: "voice",
     },
     {
@@ -140,15 +140,11 @@ export function getFiles(branch: string, os: string): IFile[] {
     {
       type: "js-bytecode-module",
       url: `https://cdn.altv.mp/js-bytecode-module/${branch}/${os}/${
-        os === "x64_linux"
-          ? "libjs-bytecode-module.so"
-          : "js-bytecode-module.dll"
+        os === "unix" ? "libjs-bytecode-module.so" : "js-bytecode-module.dll"
       }`,
       folder: `./modules/js-bytecode-module`,
       name:
-        os === "x64_linux"
-          ? "libjs-bytecode-module.so"
-          : "js-bytecode-module.dll",
+        os === "unix" ? "libjs-bytecode-module.so" : "js-bytecode-module.dll",
     },
     {
       type: "js-bytecode-module",

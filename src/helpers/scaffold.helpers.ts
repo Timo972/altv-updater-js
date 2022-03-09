@@ -8,7 +8,7 @@ export function generateServerConfig(path: string, modules: string[]): void {
     port: 7788,
     description: "Genetared by altv-srv",
     players: 1024,
-    modules: modules.filter((m) => m !== "server"),
+    modules: modules.filter((m) => m !== "server" && m !== "data"),
     resources: [],
   }).save(false, false);
 }

@@ -11,7 +11,6 @@ import {
   generateServerConfig,
   generateStartScript,
 } from "../helpers/scaffold.helpers";
-// import { getConfig } from "../helpers/config.helpers";
 
 export const InstallCommand: CommandModule = {
   command: "install <branch>",
@@ -99,18 +98,8 @@ export const InstallCommand: CommandModule = {
       throw new Error(`Please specify only valid modules e.g js-module`);
 
     if (isAbsolute(directory)) directory = relative(directory, process.cwd());
-    //else
-    //    directory = join(process.cwd(), directory);
 
     if (!exists(directory)) await dirAsync(directory);
-
-    // const modulesPath = join(directory, 'modules');
-    // if (!exists(modulesPath))
-    //   await dirAsync(modulesPath);
-
-    // const config = getConfig();
-    // config.modules = modules;
-    // config.branch = branch;
 
     const voiceAndServer =
       modules.includes("server") && modules.includes("voice");
@@ -134,7 +123,7 @@ export const InstallCommand: CommandModule = {
       )
     );
 
-    const files = getFiles(branch, os);
+    const files = getFiles(branch, os === "x64_win32" ? "win32" : "unix");
 
     const moduleDownloadChain = modules.map((module) => async () => {
       const spinner = ora(`Checking ${module}`);
@@ -234,5 +223,7 @@ function isBranchValid(branch): boolean {
 
 function isModuleValid(moduleName: string): boolean {
   if (typeof moduleName !== "string") return false;
-  return getFiles("", "").filter((file) => file.type === moduleName).length > 0;
+  return (
+    getFiles("", "win32").filter((file) => file.type === moduleName).length > 0
+  );
 }

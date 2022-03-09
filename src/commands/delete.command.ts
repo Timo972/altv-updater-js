@@ -47,7 +47,7 @@ export const DeleteCommand: CommandModule = {
     );
 
     for (const branch of branches) {
-      const files = getFiles(branch, os);
+      const files = getFiles(branch, os === "x64_win32" ? "win32" : "unix");
 
       for (const file of files) {
         const fileDest = join(directory, file.folder, file.name);
@@ -58,12 +58,12 @@ export const DeleteCommand: CommandModule = {
         if (file.folder !== "./" && exists(fileDestFolder)) {
           const spinner = ora(`Deleting folder ${yellowBright(file.folder)}`);
           await removeAsync(fileDestFolder);
-          spinner.text = `Deleted folder ${yellowBright(file.folder)}`
+          spinner.text = `Deleted folder ${yellowBright(file.folder)}`;
           spinner.succeed();
         } else if (exists(fileDest)) {
           const spinner = ora(`Deleting file ${yellowBright(file.name)}`);
           await removeAsync(fileDest);
-          spinner.text = `Deleted file ${yellowBright(file.name)}`
+          spinner.text = `Deleted file ${yellowBright(file.name)}`;
           spinner.succeed();
         }
       }
