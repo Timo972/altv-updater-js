@@ -68,7 +68,9 @@ export const InstallCommand: CommandModule = {
       others: boolean;
     }>
   ): Promise<void> {
+    /* eslint-disable */
     let { branch, modules, directory, others } = args;
+    /* eslint-enable */
     const os = `${process.arch}_${process.platform}`;
     const moduleAliases = {
       js: "js-module",
@@ -205,7 +207,7 @@ export const InstallCommand: CommandModule = {
       return true;
     });
 
-    let promise = moduleDownloadChain[0]();
+    const promise = moduleDownloadChain[0]();
     for (let i = 1; i < moduleDownloadChain.length; i++)
       await promise.then(moduleDownloadChain[i]);
 

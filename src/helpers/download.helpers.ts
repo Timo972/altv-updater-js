@@ -6,7 +6,7 @@ function isRedirect(headers: object): boolean {
 }
 
 function getRedirectUrl(headers: object): string {
-  //@ts-ignore
+  //@ts-expect-error: no headers typing
   return headers.location;
 }
 
@@ -22,11 +22,11 @@ export function downloadFile(url: string, dest: string): Promise<boolean> {
 
       resp.pipe(writeStream);
 
-      resp.on("error", (e) => resolve(false));
-      writeStream.on("error", (e) => resolve(false));
+      resp.on("error", () => resolve(false));
+      writeStream.on("error", () => resolve(false));
       writeStream.on("finish", () => resolve(true));
     })
       .on("abort", () => resolve(false))
-      .on("error", (e) => resolve(false));
+      .on("error", () => resolve(false));
   });
 }

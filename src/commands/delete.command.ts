@@ -1,7 +1,7 @@
 import { Arguments, Argv, CommandModule } from "yargs";
 import { isAbsolute, relative, join } from "path";
 import { exists, removeAsync } from "fs-jetpack";
-import { yellowBright, blueBright, red, yellow } from "chalk";
+import { yellowBright } from "chalk";
 import ora from "ora";
 import { getFiles } from "../helpers/cdn.helpers";
 
@@ -32,7 +32,9 @@ export const DeleteCommand: CommandModule = {
       });
   },
   async handler(args: Arguments<{ directory: string; hard: boolean }>) {
+    /* eslint-disable */
     let { directory, hard } = args;
+    /* eslint-enable */
     const os = `${process.arch}_${process.platform}`;
     const branches = ["release", "rc", "dev"];
 

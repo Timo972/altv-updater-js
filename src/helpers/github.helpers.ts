@@ -14,7 +14,7 @@ export interface IGithubAsset {
   download_count: number;
   created_at: string;
   updated_at: string;
-  uploader: any;
+  uploader: unknown;
 }
 
 export interface IGithubRelease {
@@ -34,7 +34,7 @@ export interface IGithubRelease {
   prerelease: boolean;
   created_at: string;
   published_at: string;
-  author: any;
+  author: unknown;
   assets: IGithubAsset[];
 }
 
