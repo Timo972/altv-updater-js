@@ -125,7 +125,7 @@ export const InstallCommand: CommandModule = {
       )
     )
 
-    const files = getFiles(branch, os === "x64_win32" ? "win32" : "unix")
+    const files = getFiles(branch, os as never)
 
     const moduleDownloadChain = modules.map((module) => async () => {
       const spinner = ora(`Checking ${module}`)
@@ -226,6 +226,6 @@ function isBranchValid(branch): boolean {
 function isModuleValid(moduleName: string): boolean {
   if (typeof moduleName !== "string") return false
   return (
-    getFiles("", "win32").filter((file) => file.type === moduleName).length > 0
+    getFiles("", "aarch64_linux").filter((file) => file.type === moduleName).length > 0
   )
 }

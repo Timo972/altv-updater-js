@@ -11,6 +11,7 @@ const hardRegistry = [
   "crashdumps",
   "cache",
   "resources",
+  "start.sh"
 ]
 
 export const DeleteCommand: CommandModule = {
@@ -49,9 +50,11 @@ export const DeleteCommand: CommandModule = {
     )
 
     for (const branch of branches) {
-      const files = getFiles(branch, os === "x64_win32" ? "win32" : "unix")
+      const files = getFiles(branch, os as never)
 
       for (const file of files) {
+        if (!file || !file.folder || !file.name) continue
+
         const fileDest = join(directory, file.folder, file.name)
         const fileDestFolder = join(directory, file.folder)
 

@@ -6,14 +6,17 @@ export type IFile = {
   isGithubRelease?: boolean;
 };
 
-export function getFiles(branch: string, os: "win32" | "unix"): IFile[] {
+export function getFiles(
+  branch: string,
+  os: "x64_win32" | "x64_linux" | "aarch64_linux"
+): IFile[] {
   return [
     //go-module
     {
       url: `shockdev04/altv-go-module/${branch}/${os}`,
       folder: `./modules`,
       type: "go-module",
-      name: os == "unix" ? "libgo-module.so" : "go-module.dll",
+      name: os !== "x64_win32" ? "libgo-module.so" : "go-module.dll",
       isGithubRelease: true,
     },
     //angelscript-module
@@ -21,7 +24,7 @@ export function getFiles(branch: string, os: "win32" | "unix"): IFile[] {
       url: `LeonMrBonnie/altv-angelscript-module/${branch}/${os}`,
       folder: `./modules`,
       type: "angelscript-module",
-      name: os == "unix" ? null : "angelscript-module.dll",
+      name: os !== "x64_win32" ? null : "angelscript-module.dll",
       isGithubRelease: true,
     },
     //js-module
@@ -33,23 +36,18 @@ export function getFiles(branch: string, os: "win32" | "unix"): IFile[] {
     },
     {
       url: `https://cdn.altv.mp/js-module/${branch}/${os}/modules/js-module/${
-        os == "unix" ? `libjs-module.so` : `js-module.dll`
+        os !== "x64_win32" ? `libjs-module.so` : `js-module.dll`
       }`,
       folder: `./modules/js-module`,
-      name: os == "unix" ? `libjs-module.so` : `js-module.dll`,
+      name: os !== "x64_win32" ? `libjs-module.so` : `js-module.dll`,
       type: "js-module",
     },
     {
       url: `https://cdn.altv.mp/js-module/${branch}/${os}/modules/js-module/${
-        os == "unix"
-          ? `libnode.so.${branch == "dev" ? "83" : "72"}`
-          : `libnode.dll`
+        os !== "x64_win32" ? `libnode.so.83` : `libnode.dll`
       }`,
       folder: `./modules/js-module`,
-      name:
-        os == "unix"
-          ? `libnode.so.${branch == "dev" ? "83" : "72"}`
-          : `libnode.dll`,
+      name: os !== "x64_win32" ? `libnode.so.83` : `libnode.dll`,
       type: "js-module",
     },
     //coreclr-module
@@ -61,10 +59,10 @@ export function getFiles(branch: string, os: "win32" | "unix"): IFile[] {
     },
     {
       url: `https://cdn.altv.mp/coreclr-module/${branch}/${os}/modules/${
-        os == "unix" ? `libcsharp-module.so` : `csharp-module.dll`
+        os !== "x64_win32" ? `libcsharp-module.so` : `csharp-module.dll`
       }`,
       folder: `./modules/csharp-module`,
-      name: os == "unix" ? `libcsharp-module.so` : `csharp-module.dll`,
+      name: os !== "x64_win32" ? `libcsharp-module.so` : `csharp-module.dll`,
       type: "csharp-module",
     },
     {
@@ -75,27 +73,27 @@ export function getFiles(branch: string, os: "win32" | "unix"): IFile[] {
     },
     {
       url: `https://cdn.altv.mp/coreclr-module/${branch}/${os}/${
-        os == "unix" ? `AltV.Net.Host.dll` : `AltV.Net.Host.dll`
+        os !== "x64_win32" ? `AltV.Net.Host.dll` : `AltV.Net.Host.dll`
       }`,
       folder: `./`,
-      name: os == "unix" ? `AltV.Net.Host.dll` : `AltV.Net.Host.dll`,
+      name: os !== "x64_win32" ? `AltV.Net.Host.dll` : `AltV.Net.Host.dll`,
       type: "csharp-module",
     },
     //data
     {
-      url: `https://cdn.altv.mp/data/${branch}/vehmodels.bin`,
+      url: `https://cdn.altv.mp/data/${branch}/data/vehmodels.bin`,
       folder: `./data`,
       name: `vehmodels.bin`,
       type: "data",
     },
     {
-      url: `https://cdn.altv.mp/data/${branch}/vehmods.bin`,
+      url: `https://cdn.altv.mp/data/${branch}/data/vehmods.bin`,
       folder: `./data`,
       name: `vehmods.bin`,
       type: "data",
     },
     {
-      url: `https://cdn.altv.mp/data/${branch}/clothes.bin`,
+      url: `https://cdn.altv.mp/data/${branch}/data/clothes.bin`,
       folder: `./data`,
       name: `clothes.bin`,
       type: "data",
@@ -115,19 +113,19 @@ export function getFiles(branch: string, os: "win32" | "unix"): IFile[] {
     },
     {
       url: `https://cdn.altv.mp/server/${branch}/${os}/${
-        os == "unix" ? `altv-server` : `altv-server.exe`
+        os !== "x64_win32" ? `altv-server` : `altv-server.exe`
       }`,
       folder: `./`,
-      name: os == "unix" ? `altv-server` : `altv-server.exe`,
+      name: os !== "x64_win32" ? `altv-server` : `altv-server.exe`,
       type: "server",
     },
     // voice
     {
       url: `https://cdn.altv.mp/voice-server/${branch}/${os}/${
-        os == "unix" ? `altv-voice-server` : `altv-voice-server.exe`
+        os !== "x64_win32" ? `altv-voice-server` : `altv-voice-server.exe`
       }`,
       folder: `./`,
-      name: os == "unix" ? `altv-voice-server` : `altv-voice-server.exe`,
+      name: os !== "x64_win32" ? `altv-voice-server` : `altv-voice-server.exe`,
       type: "voice",
     },
     {
@@ -140,11 +138,15 @@ export function getFiles(branch: string, os: "win32" | "unix"): IFile[] {
     {
       type: "js-bytecode-module",
       url: `https://cdn.altv.mp/js-bytecode-module/${branch}/${os}/${
-        os === "unix" ? "libjs-bytecode-module.so" : "js-bytecode-module.dll"
+        os !== "x64_win32"
+          ? "libjs-bytecode-module.so"
+          : "js-bytecode-module.dll"
       }`,
       folder: `./modules/js-bytecode-module`,
       name:
-        os === "unix" ? "libjs-bytecode-module.so" : "js-bytecode-module.dll",
+        os !== "x64_win32"
+          ? "libjs-bytecode-module.so"
+          : "js-bytecode-module.dll",
     },
     {
       type: "js-bytecode-module",
