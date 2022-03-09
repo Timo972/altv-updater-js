@@ -22,3 +22,5 @@ rollup.config.js
 tsconfig.json
 test
 src
+.eslintrc
+.eslintignore
