@@ -13,7 +13,7 @@ export function getFiles(
   return [
     //go-module
     {
-      url: `shockdev04/altv-go-module/${branch}/${os}`,
+      url: `timo972/altv-go-module/${branch}/${os}`,
       folder: `./modules`,
       type: "go-module",
       name: os !== "x64_win32" ? "libgo-module.so" : "go-module.dll",

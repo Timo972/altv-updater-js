@@ -1,6 +1,6 @@
 {
   "name": "altv-srv",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "description": "alt:V Multiplayer Server and Module installer/updater",
   "main": "./dist/index.js",
   "module": "./dist/index.esm.js",
@@ -15,7 +15,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "esbuild src/cli.ts --bundle --minify --outfile=dist/cli.js --platform=node --format=cjs --external:yargs --external:ora --external:@octokit/core --external:chalk --external:fs-jetpack --external:lodash.isequal",
+    "build": "node esbuild.config.js",
     "prepublish": "npm run build",
     "lint": "eslint . --ext .ts"
   },

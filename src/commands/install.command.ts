@@ -23,6 +23,11 @@ export const InstallCommand: CommandModule = {
           throw new Error("Please provide a valid alt:V branch e.g release")
         return true
       })
+      .option("arch", {
+        alias: "os",
+        describe: "The architecture of the server",
+        choices: ["x64_win32", "x64_linux", "aarch64_linux"],
+      })
       .option("modules", {
         alias: "m",
         describe: "Specify modules to download",
@@ -66,12 +71,13 @@ export const InstallCommand: CommandModule = {
       modules: string[];
       directory: string;
       others: boolean;
+      arch: string;
     }>
   ): Promise<void> {
     /* eslint-disable */
-    let { branch, modules, directory, others } = args;
+    let { branch, modules, directory, others, arch } = args;
     /* eslint-enable */
-    const os = `${process.arch}_${process.platform}`
+    const os = arch || `${process.arch}_${process.platform}`
     const moduleAliases = {
       js: "js-module",
       javascript: "js-module",
@@ -207,9 +213,7 @@ export const InstallCommand: CommandModule = {
       return true
     })
 
-    const promise = moduleDownloadChain[0]()
-    for (let i = 1; i < moduleDownloadChain.length; i++)
-      await promise.then(moduleDownloadChain[i])
+    await Promise.all(moduleDownloadChain)
 
     if (others) {
       generateServerConfig(directory, modules)
@@ -218,7 +222,7 @@ export const InstallCommand: CommandModule = {
   },
 }
 
-function isBranchValid(branch): boolean {
+function isBranchValid(branch: string): boolean {
   if (typeof branch !== "string") return false
   return branch === "release" || branch === "rc" || branch === "dev"
 }
@@ -226,6 +230,7 @@ function isBranchValid(branch): boolean {
 function isModuleValid(moduleName: string): boolean {
   if (typeof moduleName !== "string") return false
   return (
-    getFiles("", "aarch64_linux").filter((file) => file.type === moduleName).length > 0
+    getFiles("", "aarch64_linux").filter((file) => file.type === moduleName)
+      .length > 0
   )
 }

@@ -4,15 +4,7 @@ import { exists, removeAsync } from "fs-jetpack"
 import { yellowBright } from "chalk"
 import ora from "ora"
 import { getFiles } from "../helpers/cdn.helpers"
-
-const hardRegistry = [
-  "server.cfg",
-  "server.log",
-  "crashdumps",
-  "cache",
-  "resources",
-  "start.sh"
-]
+import { hardRegistry } from "../lib"
 
 export const DeleteCommand: CommandModule = {
   command: "delete",

@@ -1,13 +1,18 @@
 # altv-srv -- alt:V Multiplayer Server installer / updater
 
 ---
+
 ## how-to-install
+
 ```bash
 # installing the installer and its needed packages
 npm i -g altv-srv
 ```
+
 ---
+
 ## Advantages
+
 - fast
 - pretty console prints
 - c#-Module support
@@ -18,8 +23,11 @@ npm i -g altv-srv
 - js-bytecode-module support
 - altv-voice-server support
 - only update if outdated
+
 ---
+
 ## CLI-usage
+
 ```bash
 Usage: altv-srv <cmd> [options]
 
@@ -34,6 +42,7 @@ Options:
 ```
 
 ## Example
+
 ```bash
 # Install full server (server + data) & js + js-bytecode module
 altv-srv install release -d ./my-server -m server data js js-bytecode
@@ -42,6 +51,7 @@ altv-srv install release -d ./my-server -m server data js js-bytecode
 ```
 
 ### Install options
+
 ```bash
 altv-srv install <branch>
 
@@ -54,16 +64,17 @@ Options:
       --version  Show version number                            [boolean]
   -h, --help     Show help                                      [boolean]
   -m, --modules  Specify modules to download
-         [array] [choices: "js", "javascript", "c#", "cs", 
-                           "csharp", "go", "as", "angelscript", 
+         [array] [choices: "js", "javascript", "c#", "cs",
+                           "csharp", "go", "as", "angelscript",
                            "py", "python", "voice", "server",
-                           "jsb", "js-bytecode", "bytecode"] 
+                           "jsb", "js-bytecode", "bytecode"]
                            [default: ["server","js"]]
   -o, --others   Generate server.cfg and on linux start.sh      [boolean] [default: false]
 
 ```
 
 ### Delete options
+
 ```bash
 altv-srv delete
 
@@ -77,9 +88,32 @@ Options:
   -h, --help     Show help                           [boolean]
       --hard     Remove server.cfg, logs, resources  [boolean] [default: false]
 ```
+
 ---
+
 ## script usage
-Not supported currently
+
+### Install
+
+```js
+import { install } from "altv-srv";
+
+const os = "x64_linux";
+// os is optional, default is the system os
+await install("./", "release", ["server", "js"], os);
+```
+
+### Remove
+
+```js
+import { remove } from "altv-srv";
+
+// hard removes logs, resources & cache folder, default: false
+const hard = true;
+const os = "x64_linux";
+// os is optional again
+await remove("./", hard, os);
+```
 
 ---
 
