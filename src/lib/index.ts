@@ -22,7 +22,7 @@ export const install = async (
 ) => {
   const files = getFiles(branch, os as never)
 
-  const moduleDownloadChain = modules.map((mod) => async () => {
+  const createModuleDownload = async (mod: string): Promise<boolean> => {
     const versionFile = files.find(
       (f) => f.type === mod && f.name === "update.json"
     )
@@ -62,7 +62,9 @@ export const install = async (
     }
 
     return true
-  })
+  }
+
+  const moduleDownloadChain = modules.map((mod) => createModuleDownload(mod))
 
   await Promise.all(moduleDownloadChain)
 }

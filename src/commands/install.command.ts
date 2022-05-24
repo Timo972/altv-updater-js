@@ -133,13 +133,13 @@ export const InstallCommand: CommandModule = {
 
     const files = getFiles(branch, os as never)
 
-    const moduleDownloadChain = modules.map((module) => async () => {
-      const spinner = ora(`Checking ${module}`)
+    const createModuleDownload = async (mod: string): Promise<boolean> => {
+      const spinner = ora(`Checking ${mod}`)
       spinner.color = "yellow"
       spinner.start()
 
       const versionFile = files.find(
-        (f) => f.type === module && f.name === "update.json"
+        (f) => f.type === mod && f.name === "update.json"
       )
       const up2date =
         versionFile !== undefined
@@ -148,13 +148,13 @@ export const InstallCommand: CommandModule = {
 
       if (up2date) {
         spinner.color = "green"
-        spinner.text = `${blueBright(module)} is up to date`
+        spinner.text = `${blueBright(mod)} is up to date`
         spinner.succeed()
       } else {
-        spinner.text = `${blueBright(module)} needs update`
+        spinner.text = `${blueBright(mod)} needs update`
         spinner.succeed()
 
-        const moduleFiles = files.filter((f) => f.type === module)
+        const moduleFiles = files.filter((f) => f.type === mod)
         const isGithubHosted = moduleFiles[0].isGithubRelease === true
 
         const [owner, repo, branch] = moduleFiles[0].url.split("/")
@@ -211,7 +211,11 @@ export const InstallCommand: CommandModule = {
       }
 
       return true
-    })
+    }
+
+    const moduleDownloadChain: Promise<boolean>[] = modules.map((m) =>
+      createModuleDownload(m)
+    )
 
     await Promise.all(moduleDownloadChain)
 
