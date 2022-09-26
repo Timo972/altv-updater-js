@@ -44,10 +44,10 @@ export function getFiles(
     },
     {
       url: `https://cdn.altv.mp/js-module/${branch}/${os}/modules/js-module/${
-        os !== "x64_win32" ? `libnode.so.83` : `libnode.dll`
+        os !== "x64_win32" ? `libnode.so.102` : `libnode.dll`
       }`,
       folder: `./modules/js-module`,
-      name: os !== "x64_win32" ? `libnode.so.83` : `libnode.dll`,
+      name: os !== "x64_win32" ? `libnode.so.102` : `libnode.dll`,
       type: "js-module",
     },
     //coreclr-module
