@@ -1,5 +1,8 @@
 # altv-srv -- alt:V Multiplayer Server installer / updater
 
+### ⚠️ &nbsp;This project will be discontinued in favor of [altv-cli](https://github.com/timo972/altv-cli)!
+**If you need a fast and reliable altv cdn client, check out the linked repository.**
+
 ---
 
 ## how-to-install
